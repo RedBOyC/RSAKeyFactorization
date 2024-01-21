@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <math.h>
+
+// Function to check if a number is prime
+int isPrime(int num) {
+    if (num < 2) {
+        return 0; // Not prime
+    }
+    for (int i = 2; i <= sqrt(num); i++) {
+        if (num % i == 0) {
+            return 0; // Not prime
+        }
+    }
+    return 1; // Prime
+}
+
+// Function to calculate the mth prime number based on set A or C
+int calculateMthPrime(int m, int set) {
+    if (m <= 0) {
+        return -1; // Invalid input
+    }
+
+    int n = 0; // Starting value of n or k in the AP
+    int count = 0; // Count of prime numbers found
+
+    while (count < m) {
+        // Calculate the corresponding value of n or k in the AP
+        int value = (set == 0) ? 2 * n + 3 : n;
+
+        // Check if the value is prime
+        if (isPrime(value)) {
+            count++;
+            if (count == m) {
+                return value; // Return the mth prime number
+            }
+        }
+
+        // Increment n for the next iteration
+        n++;
+    }
+
+    return -1; // Program should not reach here under normal circumstances
+}
+
+// Function to check if M is a product of two primes
+int isRSAKey(int M) {
+    // Calculate the square root of M
+    int sqrt_M = (int)sqrt(M);
+
+    // Check for factors in the range [2, sqrt_M]
+    for (int factor = 2; factor <= sqrt_M; factor++) {
+        if (M % factor == 0) {
+            int other_factor = M / factor;
+
+            // Check if both factors are prime
+            if (isPrime(factor) && isPrime(other_factor)) {
+                // Print the prime factors P and Q
+                printf("P: %d\nQ: %d\n", factor, other_factor);
+                return 1; // M is an RSA key
+            }
+        }
+    }
+
+    return 0; // M is not an RSA key
+}
+
+int main() {
+    int M;
+
+    // Input the value for M
+    printf("Enter the value for M: ");
+    scanf("%d", &M);
+
+    // Check if M is an RSA key and print prime factors
+    if (isRSAKey(M)) {
+        printf("%d is an RSA key.\n", M);
+    } else {
+        printf("%d is not an RSA key.\n", M);
+    }
+
+    return 0;
+}
